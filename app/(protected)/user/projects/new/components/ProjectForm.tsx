@@ -109,7 +109,7 @@ export default function ProjectForm() {
                     }}
                     onDragLeave={() => setIsDragging(false)}
                     onDrop={handleDrop}
-                    className="flex w-full  justify-center flex-col items-center  border-6 border-[#c9a030]/50 rounded-4xl border-dashed border-["
+                    className={`flex w-full  justify-center flex-col items-center  border-6 0  rounded-4xl border-dashed transition-all duration-300 ${isDragging ? "border-[#c9a030] bg-[#fdf0c2]" : "border-[#c9a030]/50"}`}
                 >
                     <input
                         ref={fileInputRef}
@@ -129,7 +129,7 @@ export default function ProjectForm() {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center text-center gap-8 py-12">
-                                <div className={`border-[#c9a030] transition-all duration-300 border-8 rounded-full text-[#c9a030] p-4 ${isDragging && "scale-105"}`}>
+                                <div className={`border-[#c9a030] transition-all duration-300 border-8 rounded-full text-[#c9a030] p-4 ${isDragging && "scale-110"}`}>
                                     {isDragging ? (
                                         <UploadIcon size={64} />
                                     ) : (

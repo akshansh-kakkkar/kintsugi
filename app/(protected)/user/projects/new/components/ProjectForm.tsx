@@ -8,7 +8,6 @@ import { ChevronDown, ChevronUp, Circle, CircleCheck, Loader2, UploadCloud, Uplo
 import { getHackatimeProjects } from "@/actions/hackatime"
 import Image from "next/image"
 import { projects } from "@/db/schema"
-import { s } from "framer-motion/client"
 const kalam = Kalam({
     subsets: ['latin'],
     weight: ['300', '400', '700']

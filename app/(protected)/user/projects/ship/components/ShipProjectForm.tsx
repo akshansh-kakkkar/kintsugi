@@ -3,9 +3,10 @@
 import { AnimatePresence } from "framer-motion";
 import { Kalam, Rubik_Wet_Paint } from "next/font/google";
 import { useState } from "react";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import BannerStep from "./Banner";
 import ProjectDetailsStep from "./ProjectDetailsStep";
+import FinalShip from "./HackatimeProjects";
 
 const kalam = Kalam({
     subsets: ['latin'],
@@ -17,14 +18,19 @@ const rubiks_wet_Paint = Rubik_Wet_Paint({
     weight: '400'
 })
 
+type HackatimeProject = {
+    name: string;
+    total_seconds?: number;
+}
 type ShipProjectFormProps = {
     project: any;
+    hackatimeProjects: HackatimeProject[];
 }
 
-type Step = 1 | 2 | 3 | 4
+type Step = 1 | 2 | 3
 
 export default function ShipProjectForm({
-    project,
+    project, hackatimeProjects
 }: ShipProjectFormProps) {
     const [step, setStep] = useState<Step>(1);
 
@@ -35,9 +41,9 @@ export default function ShipProjectForm({
                 <h1 className={`absolute select-none text-center text-4xl translate-x-2 leading-none tracking-[2px] text-[#f0c14d] ${rubiks_wet_Paint.className}  [-webkit-text-stroke:0.7px_#1a1209]`}>SHIP PROJECT</h1>
             </div>
             <div className="flex justify-center gap-4 items-center mb-10">
-                {[1,2,3,4].map((item)=>(
+                {[1, 2, 3].map((item) => (
                     <div key={item} className="flex items-center">
-                        <div className={`w-70 h-3 rounded-full border-2 border-[#c9a030] flex items-center justify-center font-bold transition-all ${step >= item ? "bg-[#24221C] " : "bg-[#fff9e8]"}`}>
+                        <div className={`w-95 h-3 rounded-full border-2 border-[#c9a030] flex items-center justify-center font-bold transition-all ${step >= item ? "bg-[#24221C] " : "bg-[#fff9e8]"}`}>
                         </div>
                     </div>
                 ))}
@@ -45,37 +51,35 @@ export default function ShipProjectForm({
             <AnimatePresence mode="wait">
                 {step === 1 && (
                     <motion.div
-                     key="step-1" 
-                     initial={{opacity : 0, x : 40}}
-                     animate={{opacity : 1, x:0}}
-                     exit={{opacity : 0, x : -40}}
-                     transition={{duration : 0.25}}
-                     >
-                        <BannerStep project={project} onNext={()=>setStep(2)} />
+                        key="step-1"
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -40 }}
+                        transition={{ duration: 0.25 }}
+                    >
+                        <BannerStep project={project} onNext={() => setStep(2)} />
                     </motion.div>
                 )}
-                                {step === 2 && (
+                {step === 2 && (
                     <motion.div
-                     key="step-1" 
-                     initial={{opacity : 0, x : 40}}
-                     animate={{opacity : 1, x:0}}
-                     exit={{opacity : 0, x : -40}}
-                     transition={{duration : 0.25}}
-                     >
-                        <ProjectDetailsStep onBack={()=> setStep(1)} project={project} onNext={()=>setStep(3)} />
+                        key="step-2"
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -40 }}
+                        transition={{ duration: 0.25 }}
+                    >
+                        <ProjectDetailsStep onBack={() => setStep(1)} project={project} onNext={() => setStep(3)} />
                     </motion.div>
                 )}
-                                {step === 3 && (
+                {step === 3 && (
                     <motion.div
-                     key="step-1" 
-                     initial={{opacity : 0, x : 40}}
-                     animate={{opacity : 1, x:0}}
-                     exit={{opacity : 0, x : -40}}
-                     transition={{duration : 0.25}}
-                     >
-                          <div onClick={()=> setStep(4)}>
-                              I am a  Banner Step
-                          </div>
+                        key="step-3"
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -40 }}
+                        transition={{ duration: 0.25 }}
+                    >
+                        <FinalShip onBack={() => setStep(2)} project={project} hackatimeProjects={hackatimeProjects} />
                     </motion.div>
                 )}
             </AnimatePresence>

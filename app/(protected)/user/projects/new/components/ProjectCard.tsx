@@ -1,9 +1,10 @@
 'use client'
 import { useDeleteModalStore } from "@/app/store/DeleteModalStore";
-import { Eye, Pencil, TrashIcon } from "lucide-react";
+import { Eye, Pencil, Ship, TrashIcon } from "lucide-react";
 import { Kalam, Rubik_Wet_Paint } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { getShipStatusLabel} from '@/lib/ship-status';
 const kalam = Kalam({
     subsets: ['latin'],
     weight: ['300', '400', '700']
@@ -17,7 +18,10 @@ type ProjectCardProps = {
     hackatimeProjects: any[];
 }
 export default function ProjectCard({ project, hackatimeProjects }: ProjectCardProps) {
-    const { openDeleteModal } = useDeleteModalStore()
+    const { openDeleteModal } = useDeleteModalStore();
+    const latestShipEvent = project.shipEvents?.[0];
+    const shipStatus = latestShipEvent?.approvalStatus;;
+    const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus) : null;
     return (
         <>
             <div
@@ -91,12 +95,17 @@ export default function ProjectCard({ project, hackatimeProjects }: ProjectCardP
                                     <TrashIcon />
                                 </button>
                             </div>
+                            {ShipStatusLabel  &&(
+                            <div className={`shrink-0 py-1 mx-2 text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 ${ShipStatusLabel.className}`}>
+                                {ShipStatusLabel.label}
+                            </div>
+                            )}
                         </div>
                     </div>
 
-                        <div className="ml-2 my-1 row-span-2 text-lg truncate">
-                            {project.description || "No Description added yet."}
-                        </div>
+                    <div className="ml-2 my-1 row-span-2 text-lg truncate">
+                        {project.description || "No Description added yet."}
+                    </div>
                 </div>
             </div>
 

@@ -54,7 +54,7 @@ export default function FinalShip({ project, hackatimeProjects, onBack }: FinalS
                 return;
             }
             toast.success("Project shipped successfully!");
-            router.push(`user/projects/${project.id}`)
+            router.push(`/user/projects/view/${project.id}`)
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong while shipping")

@@ -21,7 +21,10 @@ export default function ProjectCard({ project, hackatimeProjects }: ProjectCardP
     const { openDeleteModal } = useDeleteModalStore();
     const latestShipEvent = project.shipEvents?.[0];
     const shipStatus = latestShipEvent?.approvalStatus;;
-    const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus) : null;
+    const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus) : {
+        label : "NOT SHIPPED", 
+        className : "bg-[#fff9e8] text-[#6b5a32]  border-[#c9a030]"
+    };
     return (
         <>
             <div
@@ -96,7 +99,7 @@ export default function ProjectCard({ project, hackatimeProjects }: ProjectCardP
                                 </button>
                             </div>
                             {ShipStatusLabel  &&(
-                            <div className={`shrink-0 py-1 mx-2 text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 ${ShipStatusLabel.className}`}>
+                            <div className={`shrink-0 py-1 mx-2 text-md font-bold px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 ${ShipStatusLabel.className}`}>
                                 {ShipStatusLabel.label}
                             </div>
                             )}

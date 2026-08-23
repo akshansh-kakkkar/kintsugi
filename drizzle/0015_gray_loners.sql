@@ -1,0 +1,1 @@
+ALTER TABLE "ship_events" ADD COLUMN "withdrawn_at" timestamp;

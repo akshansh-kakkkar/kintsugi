@@ -7,6 +7,9 @@ import DeleteButton from '../components/DeleteButton';
 import Link from 'next/link';
 import DeleteProject from '../../new/components/DeleteProject';
 import { getHackatimeProjects } from '@/lib/hackatime';
+import { getShipStatusLabel, ShipStatus } from '@/lib/ship-status';
+import { shipEvents } from '@/db/schema';
+import UnShipButton from '../components/UnShipButon';
 const rubik_Wet_Paint = Rubik_Wet_Paint({
     subsets: ['latin'],
     weight: ['400'],
@@ -26,9 +29,21 @@ export default async function page({ params }: { params: Promise<{ id: string }>
     if (!result.success || !result.project) {
         notFound();
     }
+
     const project = result.project;
     const hackatimeResult = await getHackatimeProjects()
     const hackatimeProjects = hackatimeResult.success ? hackatimeResult.projects : []
+          const latestShipEvent = project.shipEvents?.[0];
+        const shipStatus = latestShipEvent?.approvalStatus;;
+        const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus as ShipStatus) : {
+            label : "NOT SHIPPED", 
+            className : "bg-[#fff9e8] text-[#6b5a32]  border-[#c9a030]"
+        };
+        const activeShipEvent = project.shipEvents.find(
+            (event)=> event.withdrawnAt === null &&
+            event.approvalStatus === "pending"
+        )
+    const isShipped = !!activeShipEvent
     return (
         <>
             <div className={`${kalam.className} w-full h-[89vh] shadow-[3px_5px_0_rgba(26,18,9,0.18)]  flex flex-col  rounded-[55px] border-[4px] shadow-[3px_5px_0_rgba(26,18,9,0.18)] border-[#24221C] bg-[#e8b93f] p-4`}>
@@ -38,9 +53,14 @@ export default async function page({ params }: { params: Promise<{ id: string }>
                         <h1 className={`absolute left-[7px]  top-[4px] text-center select-none text-6xl leading-none tracking-[2px] text-[#1a1209] ${rubik_Wet_Paint.className}`}>{project.name}</h1>
                         <h1 className={`absolute select-none text-center text-6xl translate-x-2 leading-none tracking-[2px] text-[#f0c14d] ${rubik_Wet_Paint.className}  [-webkit-text-stroke:0.7px_#1a1209]`}>{project.name}</h1>
                     </div>
+                    {isShipped ? (
+                        <UnShipButton projectId={project.id} />
+                    ) : (
                     <Link href={`/user/projects/ship/${id}`} className="absolute  right-4 border-[#c9a030] border-3 rounded-xl top-4 bg-[#2A1A08] py-2 px-4">
                         <Ship size={24} className='text-[#c9a030]' strokeWidth={2.5}  />
                     </Link>
+                    )}
+
                     <div className="relative  w-full h-100 shrink-0 overflow-hidden rounded-3xl border-4">
                         {
                             project.bannerUrl ? (

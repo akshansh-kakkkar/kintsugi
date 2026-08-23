@@ -129,6 +129,7 @@ export const shipEvents = pgTable(
   {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    withdrawnAt : timestamp("withdrawn_at"),
     projectId: integer("project_id")
       .notNull()
       .references(() => projects.id, { onDelete: "cascade" }),

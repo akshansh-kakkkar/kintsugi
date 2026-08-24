@@ -4,7 +4,9 @@ import { Eye, Pencil, Ship, TrashIcon } from "lucide-react";
 import { Kalam, Rubik_Wet_Paint } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import { getShipStatusLabel} from '@/lib/ship-status';
+import { getShipStatusLabel } from '@/lib/ship-status';
+import HideDeleteButton from "../../view/components/HideDeleteButton";
+import HideEditButton from "../../view/components/HideEditButton";
 const kalam = Kalam({
     subsets: ['latin'],
     weight: ['300', '400', '700']
@@ -21,7 +23,10 @@ export default function ProjectCard({ project, hackatimeProjects }: ProjectCardP
     const { openDeleteModal } = useDeleteModalStore();
     const latestShipEvent = project.shipEvents?.[0];
     const shipStatus = latestShipEvent?.approvalStatus;;
-    const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus) : null;
+    const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus) : {
+        label: "NOT SHIPPED",
+        className: "bg-[#fff9e8] text-[#6b5a32]  border-[#c9a030]"
+    };
     return (
         <>
             <div
@@ -85,20 +90,31 @@ export default function ProjectCard({ project, hackatimeProjects }: ProjectCardP
                                 </Link>
                             </div>
                             <div>
+                                {shipStatus === "pending" || shipStatus === "permanently_rejected" ? (
+                                    <HideEditButton />
+                                ):(
                                 <Link href={`projects/edit/${project.id}`} className="shrink-0 py-1 mx-2 bg-[#2A1A08] text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 text-[#f0c14d] border-[#f0c14d]">
                                     <Pencil />
                                 </Link>
+                                )}
+
                             </div>
                             <div>
+                                {
+                                    shipStatus === "pending" ? (
+                                        <HideDeleteButton />
+                                    ) : (
+                                        <button type="button" onClick={() => openDeleteModal(project.id, project.name)} className="shrink-0 py-1 mx-2 bg-[#2A1A08] text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 text-[#f0c14d] border-[#f0c14d]">
+                                            <TrashIcon />
+                                        </button>
+                                    )
+                                }
 
-                                <button type="button" onClick={() => openDeleteModal(project.id, project.name)} className="shrink-0 py-1 mx-2 bg-[#2A1A08] text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 text-[#f0c14d] border-[#f0c14d]">
-                                    <TrashIcon />
-                                </button>
                             </div>
-                            {ShipStatusLabel  &&(
-                            <div className={`shrink-0 py-1 mx-2 text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 ${ShipStatusLabel.className}`}>
-                                {ShipStatusLabel.label}
-                            </div>
+                            {ShipStatusLabel && (
+                                <div className={`shrink-0 py-1 mx-2 text-md font-bold px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 ${ShipStatusLabel.className}`}>
+                                    {ShipStatusLabel.label}
+                                </div>
                             )}
                         </div>
                     </div>

@@ -7,6 +7,11 @@ import DeleteButton from '../components/DeleteButton';
 import Link from 'next/link';
 import DeleteProject from '../../new/components/DeleteProject';
 import { getHackatimeProjects } from '@/lib/hackatime';
+import { getShipStatusLabel, ShipStatus } from '@/lib/ship-status';
+import UnShipButton from '../components/UnShipButon';
+import { toast } from 'sonner';
+import HideEditButton from '../components/HideEditButton';
+import HideDeleteButton from '../components/HideDeleteButton';
 const rubik_Wet_Paint = Rubik_Wet_Paint({
     subsets: ['latin'],
     weight: ['400'],
@@ -26,9 +31,24 @@ export default async function page({ params }: { params: Promise<{ id: string }>
     if (!result.success || !result.project) {
         notFound();
     }
+
     const project = result.project;
     const hackatimeResult = await getHackatimeProjects()
     const hackatimeProjects = hackatimeResult.success ? hackatimeResult.projects : []
+    const latestShipEvent = project.shipEvents?.[0];
+    const shipStatus = latestShipEvent?.approvalStatus;;
+    const ShipStatusLabel = shipStatus ? getShipStatusLabel(shipStatus as ShipStatus) : {
+        label: "NOT SHIPPED",
+        className: "bg-[#fff9e8] text-[#6b5a32]  border-[#c9a030]"
+    };
+    const activeShipEvent = project.shipEvents.find(
+        (event) => event.withdrawnAt === null &&
+            event.approvalStatus === "pending"
+    )
+    const isShipped = !!activeShipEvent
+    const editDisabled = () => {
+        return toast.error("You can't edit your project when shipped or rejected")
+    }
     return (
         <>
             <div className={`${kalam.className} w-full h-[89vh] shadow-[3px_5px_0_rgba(26,18,9,0.18)]  flex flex-col  rounded-[55px] border-[4px] shadow-[3px_5px_0_rgba(26,18,9,0.18)] border-[#24221C] bg-[#e8b93f] p-4`}>
@@ -38,9 +58,14 @@ export default async function page({ params }: { params: Promise<{ id: string }>
                         <h1 className={`absolute left-[7px]  top-[4px] text-center select-none text-6xl leading-none tracking-[2px] text-[#1a1209] ${rubik_Wet_Paint.className}`}>{project.name}</h1>
                         <h1 className={`absolute select-none text-center text-6xl translate-x-2 leading-none tracking-[2px] text-[#f0c14d] ${rubik_Wet_Paint.className}  [-webkit-text-stroke:0.7px_#1a1209]`}>{project.name}</h1>
                     </div>
-                    <Link href={`/user/projects/ship/${id}`} className="absolute  right-4 border-[#c9a030] border-3 rounded-xl top-4 bg-[#2A1A08] py-2 px-4">
-                        <Ship size={24} className='text-[#c9a030]' strokeWidth={2.5}  />
-                    </Link>
+                    {isShipped ? (
+                        <UnShipButton projectId={project.id} />
+                    ) : (
+                        <Link href={`/user/projects/ship/${id}`} className="absolute  right-4 border-[#c9a030] border-3 rounded-xl top-4 bg-[#2A1A08] py-2 px-4">
+                            <Ship size={24} className='text-[#c9a030]' strokeWidth={2.5} />
+                        </Link>
+                    )}
+
                     <div className="relative  w-full h-100 shrink-0 overflow-hidden rounded-3xl border-4">
                         {
                             project.bannerUrl ? (
@@ -95,14 +120,30 @@ export default async function page({ params }: { params: Promise<{ id: string }>
                             )}
                         </div>
                         <div>
-                            <Link href={`/user/projects/edit/${project.id}`} className="whitespace-nowrap py-1 mx-2 bg-[#2A1A08] text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 text-[#f0c14d] border-[#f0c14d]">
-                                <Pencil />
-                            </Link>
+                            {shipStatus === "pending" || shipStatus === "permanently_rejected" ? (
+                                <HideEditButton />
+                            ) : (
+                                <Link href={`/u>ser/projects/edit/${project.id}`} className="whitespace-nowrap py-1 mx-2 bg-[#2A1A08] text-xl px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 text-[#f0c14d] border-[#f0c14d]">
+                                    <Pencil />
+                                </Link>
+                            )}
+
                         </div>
-                        <DeleteButton projectId={project.id} projectName={project.name} />
+                        {shipStatus === "pending" ? (
+                            <HideDeleteButton />
+                        ) : (
+                            <DeleteButton projectId={project.id} projectName={project.name} />
+                        )}
+
+                        {ShipStatusLabel && (
+                            <div className={`shrink-0 py-1 mx-2 text-md font-bold px-4 h-12 items-center text-center justify-center flex  rounded-2xl border-2 ${ShipStatusLabel?.className}`}>
+                                {ShipStatusLabel?.label}
+                            </div>
+                        )}
+
                     </div>
                 </div>
-            </div>
+            </div >
             <DeleteProject />
         </>
     )

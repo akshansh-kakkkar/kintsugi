@@ -2,11 +2,9 @@
 import { db } from "@/db";
 import { requireAnyRole, requireAuth } from "@/lib/auth-guard";
 import { projects, shipEvents, user } from "@/db/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { getHackatimeHours } from "@/lib/hackatime";
 import { addLog } from "@/lib/db/logs";
-import { success } from "better-auth";
-import { error } from "console";
 
 export async function shipProject(projectId: number, shipText: string, selectedProjects: string[]) {
     // get the total number of hours tracked via hackatime
@@ -24,6 +22,7 @@ export async function shipProject(projectId: number, shipText: string, selectedP
             eq(shipEvents.projectId, projectId),
             eq(shipEvents.userId, session.id),
             eq(shipEvents.approvalStatus, "pending"),
+            isNull(shipEvents.withdrawnAt)
         ),
     })
 
@@ -147,7 +146,7 @@ export async function rejectProject(shipEventId: number, reviewerNote?: string, 
         const [updatedShipEvent] = await tx
             .update(shipEvents)
             .set({
-                approvalStatus: "reject",
+                approvalStatus: "rejected",
                 reviewerNote: reviewerNote ?? shipEvent.reviewerNote,
                 auditNote
             })

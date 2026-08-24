@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { projects } from "@/db/schema";
+import { projects, shipEvents } from "@/db/schema";
 import { requireAuth } from "@/lib/auth-guard";
 import { addLog } from "@/lib/db/logs";
 import { success } from "better-auth";
@@ -185,6 +185,13 @@ export async function getProject(projectId: number) {
   try {
     data = await db.query.projects.findFirst({
       where: eq(projects.id, projectId),
+      with : {
+        shipEvents : {
+          orderBy : (shipEvents, {desc})=> [
+            desc(shipEvents.createdAt),
+          ]
+        }
+      }
     });
   } catch (err) {
     await safeLog({

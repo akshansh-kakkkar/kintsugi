@@ -3,7 +3,7 @@ import { Kalam, Rubik_Wet_Paint } from "next/font/google";
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/db";
 import { desc, eq } from "drizzle-orm";
-import { projects } from "@/db/schema";
+import { projects, shipEvents } from "@/db/schema";
 import { getHackatimeProjects } from "@/lib/hackatime";
 import ProjectCard from "./new/components/ProjectCard";
 import DeleteProject from "./new/components/DeleteProject";
@@ -20,7 +20,15 @@ export default async function page() {
     const session = await requireAuth();
     const userProjects = await db.query.projects.findMany({
         where: eq(projects.userId, session.id),
-        orderBy: [desc(projects.createdAt)]
+        orderBy: [desc(projects.createdAt)],
+        with : {
+            shipEvents : {
+                orderBy : (shipEvents, {desc})=>[
+                    desc(shipEvents.createdAt)
+                ],
+                limit : 1,
+            },
+        }
     })
     const hackatimeResult = await getHackatimeProjects();
     const hackatimeProjects = hackatimeResult.success ? hackatimeResult.projects : [];

@@ -201,6 +201,7 @@ export default function FinalShip({ project, hackatimeProjects, onBack }: FinalS
                         </button>
                     </div>
                 </div>
+                
                 <div className="mt-5 flex items-center justify-between gap-4">
                     <div className="text-[#24221C]">
                         <p className="text-lg font-bold">Ready to ship?</p>

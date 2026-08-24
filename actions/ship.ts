@@ -5,8 +5,6 @@ import { projects, shipEvents, user } from "@/db/schema";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { getHackatimeHours } from "@/lib/hackatime";
 import { addLog } from "@/lib/db/logs";
-import { success } from "better-auth";
-import { error } from "console";
 
 export async function shipProject(projectId: number, shipText: string, selectedProjects: string[]) {
     // get the total number of hours tracked via hackatime

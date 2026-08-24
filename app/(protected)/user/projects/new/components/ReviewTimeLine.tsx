@@ -102,7 +102,7 @@ function TimelineEvent({
 }
 
 function formatDate(date : Date | string){
-    return new Intl.DateTimeFormat("en-IN", {
+    return new Intl.DateTimeFormat(undefined, {
         day : "numeric",
         month : "short",
         year : "numeric",

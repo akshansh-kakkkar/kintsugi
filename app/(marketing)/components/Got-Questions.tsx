@@ -49,7 +49,7 @@ export default function GotQuestions() {
                 <h1 className={`${kalam.className} text-[#2a1a08] text-4xl font-bold`}>Got Questions?</h1>
                 <p className={`text-lg ${kalam.className} text-[#ac9453]`}>Click the Pot to get assisted</p>
             </div>
-            <div className="flex justify-center transition-all duration-300 items-center flex-col gap-4 mx-8">
+            <div className="flex justify-center transition-all duration-300 items-center flex-col gap-4 md:mx-8">
                 {questions.map((question) => {
                     const isOpen = openId === question.id
                     return (
@@ -61,7 +61,7 @@ export default function GotQuestions() {
                                 <div className={`${kalam.className}  text-xl text-[#ac9453] font-bold`}>{question.question}</div>
                             </div>
                             <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"}`}>
-                                <div className={`text-lg text-[#F5E4B0] font-extralight ${kalam.className} mx-18`}>{question.answer}</div>
+                                <div className={`text-lg text-[#F5E4B0] font-extralight ${kalam.className} md:mx-18`}>{question.answer}</div>
                             </div>
                         </div>
                     )

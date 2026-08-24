@@ -18,8 +18,8 @@ export default function SignUpSection() {
     const authDisabled = process.env.NEXT_PUBLIC_AUTH_DISABLED === "true";
     return (
         <div className="flex my-12">
-            <div className="bg-[#2A1A08] relative min-h-60 items-center flex justify-between  py-6  gap-12  border-4 border-dashed border-[#c9a030] w-full mx-8 px-6 rounded-4xl group-hover:scale-102 transition-all duration-300">
-                <div className="flex flex-col gap-4 w-1/2">
+            <div className="bg-[#2A1A08] lg:flex-row flex-col relative lg:min-h-60 items-center flex justify-center items-center lg:justify-between  py-6  gap-12  border-4 border-dashed border-[#c9a030] w-full md:mx-8 px-6 rounded-4xl group-hover:scale-102 transition-all duration-300">
+                <div className="flex flex-col gap-4 lg:w-1/2 w-full">
                     <h1 className={`${kalam.className} text-left w-full text-[#c9a030] text-2xl font-bold`}>Login</h1>
                     {!session && !isPending && !authDisabled && (
                         <>
@@ -57,7 +57,7 @@ export default function SignUpSection() {
                         </>
                     )}
                     {session && !isPending && !authDisabled && (
-                        <Link className={`${kalam.className} w-full text-3xl py-2 font-semibold uppercase rounded-2xl border-4 border-dashed border-[#1a1209] text-center items-center justify-center flex gap-2 text-[#2a1a08] bg-[#e8dfa0] `} href={'/user'}>
+                        <Link className={`${kalam.className} w-full text-sm md:text-3xl py-2 font-semibold uppercase rounded-2xl border-4 border-dashed border-[#1a1209] text-center items-center justify-center flex gap-2 text-[#2a1a08] bg-[#e8dfa0] `} href={'/user'}>
                             Go to Dashboard
                         </Link>
                     )}
@@ -67,7 +67,7 @@ export default function SignUpSection() {
                         </p>
                     )}
                 </div>
-                <div className="relative">
+                <div className="lg:relative lg:block hidden">
                     <Sticker />
                 </div>
             </div>

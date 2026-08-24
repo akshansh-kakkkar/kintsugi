@@ -1,11 +1,14 @@
+'use server'
 import { db } from "@/db";
 import { requireAnyRole, requireAuth } from "@/lib/auth-guard";
 import { projects, shipEvents, user } from "@/db/schema";
 import { and, eq, sql } from "drizzle-orm";
 import { getHackatimeHours } from "@/lib/hackatime";
 import { addLog } from "@/lib/db/logs";
+import { success } from "better-auth";
+import { error } from "console";
 
-export async function shipProject(projectId: number, shipText: string) {
+export async function shipProject(projectId: number, shipText: string, selectedProjects: string[]) {
     // get the total number of hours tracked via hackatime
     // total hours - approved hours
     // for example, first ship event: 0 hours approved, 20 hours on hackatime => 20 hours in the ship event
@@ -29,7 +32,7 @@ export async function shipProject(projectId: number, shipText: string) {
     }
 
 
-    const totalTime = await getHackatimeHours(project.hackatimeProjects)
+    const totalTime = await getHackatimeHours(selectedProjects)
 
     if (!totalTime.success || totalTime.totalSeconds == null || totalTime.totalSeconds <= 15 * 60) {
         return { success: false, error: "error" in totalTime ? totalTime.error : "Not enough tracked time to ship" }
@@ -38,6 +41,18 @@ export async function shipProject(projectId: number, shipText: string) {
     const approvedSeconds = project.approvedSeconds ?? 0
     const newSeconds = totalTime.totalSeconds - approvedSeconds
 
+    if (existingPending) {
+        return {
+            success: false,
+            error: "You already have a pending ship event for this project."
+        };
+    }
+    if (selectedProjects.length === 0) {
+        return {
+            success: false,
+            error: "Please select at least one Hackatime proejct"
+        }
+    }
     if (newSeconds <= 0) {
         return { success: false, error: 'No new tracked time since last ship' }
     }
@@ -52,8 +67,8 @@ export async function shipProject(projectId: number, shipText: string) {
             approvalStatus: "pending",
         })
         .returning()
-    
-        await addLog({
+
+    await addLog({
         title: 'Project Shipped',
         description: 'A project was shipped',
         location: '/projects/ship',
@@ -99,7 +114,7 @@ export async function approveProject(shipEventId: number, reviewerNote?: string,
         const [updatedUser] = await tx
             .update(user)
             .set({
-                pots: sql`${user.pots} + ${shipEvent.seconds / 720 }`,
+                pots: sql`${user.pots} + ${shipEvent.seconds / 720}`,
             })
             .where(eq(user.id, shipEvent.userId))
             .returning()
@@ -152,3 +167,4 @@ export async function rejectProject(shipEventId: number, reviewerNote?: string, 
 
     return { success: true, ...result }
 }
+

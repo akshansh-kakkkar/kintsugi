@@ -12,6 +12,7 @@ import UnShipButton from '../components/UnShipButon';
 import { toast } from 'sonner';
 import HideEditButton from '../components/HideEditButton';
 import HideDeleteButton from '../components/HideDeleteButton';
+import ReviewTimeLine from '../../new/components/ReviewTimeLine';
 const rubik_Wet_Paint = Rubik_Wet_Paint({
     subsets: ['latin'],
     weight: ['400'],
@@ -141,6 +142,9 @@ export default async function page({ params }: { params: Promise<{ id: string }>
                             </div>
                         )}
 
+                    </div>
+                    <div>
+                        <ReviewTimeLine events={project.shipEvents} />
                     </div>
                 </div>
             </div >

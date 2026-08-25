@@ -48,18 +48,18 @@ export default function PotTiers() {
             </div>
             <div className="md:grid md:grid-cols-2 gap-12 flex flex-col justify-center items-center md:place-items-center justify-center ">
                 {Cards.map((card) => (
-                    <div key={card.id} className="col-span-1 lg:w-120 xl:w-160 h-80 rounded-4xl  bg-[#2A1A08] px-6 py-6 justify-between border-4 border-[#c9a030] border-dashed flex flex-col gap-2 cursor-grab transition-all duration-300 hover:scale-102 hover:shadow-[3px_8px_0_rgba(26,18,9,0.18)]  hover:-translate-y-2">
+                    <div key={card.id} className="col-span-1 lg:w-120 xl:w-160 h-100 md:h-80 rounded-4xl  bg-[#2A1A08] px-6 py-6 justify-between border-4 border-[#c9a030] border-dashed flex flex-col gap-2 cursor-grab transition-all duration-300 hover:scale-102 hover:shadow-[3px_8px_0_rgba(26,18,9,0.18)]  hover:-translate-y-2">
                         <div className="select-none">
                            <Image src={card.image} alt={card.title} width={120} height={120} /> 
                         </div>
-                        <div className={`flex gap-2 text-[#F5E4B0] font-medium text-2xl ${kalam.className}`}>
+                        <div className={`flex gap-2 text-[#F5E4B0] font-medium text-xl md:text-2xl ${kalam.className}`}>
                             <div>{card.icon}</div>
                             <div>{card.title}</div>
                         </div>
-                        <div className={`text-[#A3926D] text-xl ${kalam.className}`}>
+                        <div className={`text-[#A3926D] text-lg md:text-xl ${kalam.className}`}>
                             {card.description}
                         </div>
-                        <div className={`${kalam.className} bg-[#3d2A08] w-fit text-xl px-4 py-2 rounded-3xl items-center text-center justify-center flex text-[#c9a030]`}>
+                        <div className={`${kalam.className} bg-[#3d2A08] w-fit text-md md:text-xl px-4 py-2 rounded-3xl items-center text-center justify-center flex text-[#c9a030]`}>
                             {card.tags}
                         </div>
                     </div>

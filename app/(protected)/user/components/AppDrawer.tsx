@@ -1,17 +1,19 @@
 'use client';
 import { useAppDrawer } from "@/app/store/AppDrawer"
+import { authClient } from "@/lib/auth-client";
 import { AnimatePresence, motion } from "framer-motion"
-import { Eye, FileIcon, HomeIcon, ShieldCheck, ShoppingBasket, UserIcon, Users } from "lucide-react";
+import { FileIcon, HomeIcon, LogOut, ShoppingBasket, UserIcon, Users } from "lucide-react";
 import { Kalam } from "next/font/google";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 const kalam = Kalam({
-    subsets : ['latin'],
-    weight : ['300', '400', '700']
+    subsets: ['latin'],
+    weight: ['300', '400', '700']
 })
 export default function AppDrawer() {
     const { isOpen, onOpen, onClose } = useAppDrawer();
     const pathName = usePathname();
+    const router = useRouter();
     return (
         <AnimatePresence>
 
@@ -43,23 +45,34 @@ export default function AppDrawer() {
                             <div>金継ぎ</div>
                         </div>
                         <div className="px-5 py-6 flex  justify-center items-center  gap-12 flex-wrap">
-                            <Link href={'/user'} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
+                            <Link href={'/user'} onClick={onClose} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
                                 <HomeIcon />
                                 <span>Home</span>
                             </Link>
-                            <Link href={'/user/projects'} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user/projects" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
+                            <Link href={'/user/projects'} onClick={onClose} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user/projects" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
                                 <FileIcon />
                                 <span>Projects</span>
                             </Link>
 
-                            <Link href={'/user/shop'} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user/shop" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
+                            <Link href={'/user/shop'} onClick={onClose} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user/shop" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
                                 <ShoppingBasket />
                                 <span>Shop</span>
                             </Link>
-                            <Link href={'/user/social'}className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user/social" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
+                            <Link href={'/user/social'} onClick={onClose} className={`flex transition-all duration-300 flex-col gap-2 items-center border-2 py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-25 h-25 ${kalam.className} text-xl ${pathName === "/user/social" ? "border-[#c9a030] border-2 text-[#c9a030] bg-[#3d2a08] font-bold" : "text-[#3d2a08] border-[#3d2a08]"}`} >
                                 <Users />
                                 <span>People</span>
                             </Link>
+                            <button 
+                            onClick={async()=>{
+                                await authClient.signOut();
+                                router.refresh();
+                            }}
+                            className={`flex transition-all duration-300  mx-6 gap-4 items-center border-2 font-semibold py-2 px-4 rounded-2xl  justify-center  text-center border-dashed w-full h-15 ${kalam.className} text-xl text-[#c9a030] bg-[#3d2a08]`}>
+                                <span>
+                                    <LogOut strokeWidth={3} />
+                                </span>
+                                <span className="text-2xl">Logout</span>
+                            </button>
                         </div>
                     </motion.div>
                 </motion.div>

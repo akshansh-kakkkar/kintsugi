@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
+import Image from "next/image"
+
 const kalam = Kalam({
     subsets: ['latin'],
     weight: ['300', '400', '700']
@@ -13,9 +15,10 @@ interface SideBarProps {
     pinned: boolean;
     setPinned: React.Dispatch<React.SetStateAction<boolean>>;
     displayName : string;
-    roles: string[]
+    roles: string[];
+    image?:string | null
 }
-export default function SideBar({ pinned, setPinned, displayName, roles }: SideBarProps) {
+export default function SideBar({ pinned, setPinned, displayName, roles, image }: SideBarProps) {
     const pathname = usePathname();
     const router = useRouter();
     return (
@@ -60,7 +63,13 @@ export default function SideBar({ pinned, setPinned, displayName, roles }: SideB
             </div>
             <div className="border-t-2 flex-col gap-2 py-4 w-full border-dashed flex justify-center items-center border-[#c9a030]">
                 <div className=" bg-[#c9a030] w-12 h-12 flex justify-center items-center text-center rounded-full ">
-                    <div className="translate-y-[4px] select-none text-4xl">{displayName.trim().charAt(0).toUpperCase() ?? "?"}</div>
+                   {image ? (
+                    <Image src={image} alt={displayName} width={48} height={48} className="w-full h-full object-cover" />
+                   ) : (                 
+                    <div className="translate-y-[4px] select-none text-4xl">
+                        {displayName.trim().charAt(0).toUpperCase() ?? "?"}
+                    </div>
+                      )}
                 </div>
                 <div>
                     <button onClick={async () => {

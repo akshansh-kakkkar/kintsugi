@@ -21,6 +21,7 @@ interface SideBarProps {
 export default function SideBar({ pinned, setPinned, displayName, roles, image }: SideBarProps) {
     const pathname = usePathname();
     const router = useRouter();
+    console.log("Sidebar Image",image)
     return (
         <aside className={ `hidden group select-none z-20 md:flex h-screen flex-col items-center justify-between gap-4 border-r-2 border-dashed border-[#c9a030] bg-[#2A1A08] py-4 text-center transition-[width] duration-500 ease-out ${kalam.className} ${pinned ? "sticky top-0 w-60" : "sticky top-0 w-20 hover:w-60  absolute top-0 left-0"}`}>
             <div className="flex flex-col gap-12 w-full">
@@ -64,7 +65,7 @@ export default function SideBar({ pinned, setPinned, displayName, roles, image }
             <div className="border-t-2 flex-col gap-2 py-4 w-full border-dashed flex justify-center items-center border-[#c9a030]">
                 <div className=" bg-[#c9a030] w-12 h-12 flex justify-center items-center text-center rounded-full ">
                    {image ? (
-                    <Image src={image} alt={displayName} width={48} height={48} className="w-full h-full object-cover" />
+                    <Image src={image} alt={displayName} width={48} height={48} className="w-full  h-full object-cover" />
                    ) : (                 
                     <div className="translate-y-[4px] select-none text-4xl">
                         {displayName.trim().charAt(0).toUpperCase() ?? "?"}

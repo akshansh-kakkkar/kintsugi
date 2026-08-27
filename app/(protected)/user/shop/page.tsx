@@ -11,7 +11,7 @@ export default function page(){
                 <div>
                     <ShoppingBasket size={64} />
                 </div>
-                <div className={`text-2xl text-[#c9a030] ${kalam.className}`}>No Items at the moment</div>
+                <div className={`text-2xl text-[#c9a030] ${kalam.className}`}>No Items available at the moment</div>
             </div>
         </div>
     )

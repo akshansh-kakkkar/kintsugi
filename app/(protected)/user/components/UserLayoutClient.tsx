@@ -9,16 +9,17 @@ import { useAppDrawer } from "@/app/store/AppDrawer";
 interface UserLayoutClientProps {
     children: React.ReactNode;
     displayName: string;
-    roles: string[]
+    roles: string[];
+    image : string | null;
 }
 
-export default function UserLayoutClient({ children, displayName, roles }: UserLayoutClientProps) {
+export default function UserLayoutClient({ children, displayName, roles, image }: UserLayoutClientProps) {
     const [pinned, setPinned] = useState(false);
     const {onOpen, onClose} = useAppDrawer()
     return (
         <main className="max-w-screen min-h-screen flex relative">
             <div className={` hidden md:block shrink-0 transition-[width] duration-500 ${pinned ? "w-60" : "w-20"}`}>
-                <SideBar pinned={pinned} setPinned={setPinned} displayName={displayName} roles={roles}/>
+                <SideBar pinned={pinned} setPinned={setPinned} displayName={displayName} roles={roles} image={image} />
             </div>
             <div className="md:hidden block">
                 <AppDrawer />

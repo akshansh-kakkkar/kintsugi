@@ -75,4 +75,4 @@ bun run dev
 Link
 ###### https://kintsugi-chi.vercel.app/
 
-`AI Note : AI was used minimally during development. Primirarily for research and degubbing/fixing occasional bugs.`
+`AI Note : AI was used minimally during development. primarily for research and debugging or fixing occasional bugs.`

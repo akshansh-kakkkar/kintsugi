@@ -98,7 +98,6 @@ CDN_KEY=
 bun run dev
 ```
 
-Link
-###### https://kintsugi-chi.vercel.app/
-
+Demo LInk
+#### https://kintsugi-xi.vercel.app/
 `AI Note : AI was used minimally during development. primarily for research and debugging or fixing occasional bugs.`

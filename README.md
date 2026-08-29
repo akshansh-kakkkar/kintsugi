@@ -31,6 +31,7 @@ Its a website made for ysws which is still in draft named as `kintsugi`. Kintsug
 ## Tech Stack
 - Next JS
 - HC Auth
+- TypeScript
 - Hackatime 
 - Neon 
 - TailwindCSS
